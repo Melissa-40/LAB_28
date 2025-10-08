@@ -1,0 +1,38 @@
+#############################################
+#LABORATORIO: Tidy data (datos faltantes) #
+
+#Elaboro Ruth Melissa Cobos Ruiz#
+#############################################
+#Prerrequisitos
+#instalar paquete tidyverse
+install.packages("tidyverse")
+
+library(tidyverse)
+#cargar datos
+acciones <- tibble(
+  anio = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+  trimestre = c(1, 2, 3, 4, 2, 3, 4),
+  retorno = c(1.88, 0.59, 0.35, NA, 0.92, 0.17, 2.66)
+)
+#DF1
+#convertir en dataframe
+DF_1 = acciones
+
+#DF2
+# VER EXPLICITOS LOS VALORES FALTANTES
+DF_2 = DF_1 %>% 
+  spread(anio, retorno)
+
+#DF3
+#ELIMINAR LOS VALORES FALTANTES (EXPLICITOS E IMPLICITOS)
+DF3 = acciones %>% 
+  pivot_wider(names_from = anio, values_from = retorno) %>% 
+  pivot_longer(cols = c("2015" , "2016"),
+              names_to = "anio" ,
+              values_to = "retorno",
+              values_drop_na = TRUE )
+
+#DF4
+#OTRA HERRAMIENTA PARA HACER EXPLICITOS LOS VALORES FALTANTES (CONSERVANDO LA ESTRUCTURA ORIGINAL)
+DF4 = DF_1  %>% 
+  complete(anio, trimestre)
